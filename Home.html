@@ -1,0 +1,110 @@
+<!DOCTYPE html
+
+	This HTML page is desinged to perform the following functions:
+	 1. Get the country name input from the user 
+	  2. display card containing the relevant country names and the corresponding flag
+	  3. Onclicking the card getredirected to the details of the country's details
+
+>
+<html>
+	<head>
+	<style>
+		input[type=text], select 
+	{
+	  width: 50%;
+	  padding: 12px 20px;
+	  margin: 8px 0;
+	  display: inline-block;
+	  border: 1px solid #ccc;
+	  border-radius: 4px;
+	  box-sizing: border-box;
+	}
+
+	input[type=submit] 
+	{
+	  width: 50%;
+	  background-color: #4CAF50;
+	  color: white;
+	  padding: 12px 20px;
+	  margin: 8px 0;
+	  border: 1px solid #ccc;
+	  border-radius: 4px;
+	  cursor: pointer;
+	}
+
+	button
+	{
+		 background-color:white;
+		 border: none;
+		 color: black;
+		 padding: 10px 10px;
+		 text-align: center;
+		 text-decoration: none;
+		 display: inline-block;
+		 font-size: 18px;
+		 margin: 5px 5px;
+		 cursor: pointer;
+		 position:relative;
+		}
+	
+	</style>
+	</head>
+	<body>
+	<br><br><br>
+	<center>
+	<div>
+	<h1><b>Country</b></h1>
+		<input type="text" id="CountryName" size="65" ">
+		<input type="button" value="GO" onclick="DisplayList()">
+		<div id="searchResults"></div>
+	</div>
+	</center>
+		<script>
+			function DisplayList() 
+			{
+				//Input from the user is fetched using input element id 
+				 var Country= document.getElementById("CountryName").value;
+				 fetch('https://restcountries.eu/rest/v2/name/'+Country+'')
+				  .then(response => response.json())
+				  .then(data => {
+					// data would contain the list of related json objects of the countries
+					var a=data;
+					
+					 var parentDiv = document.getElementById("searchResults");  
+					 /* This part is added to remove if any existing child element is present in the div="searchResults "*/
+					  while(parentDiv.hasChildNodes()) 
+					  {
+						parentDiv.removeChild(parentDiv.childNodes[0]);
+					  }
+					/*To append the new elements to the searchResults based on the user query*/
+					for(var i=0;i<a.length;i++)
+					{  
+						/*Considering each element as a button and setting it's id to the alpha2Code value which would uniquely identify the country details*/
+						var button = document.createElement("button");
+						var img = document.createElement("img");
+
+						button.id=a[i].alpha2Code;
+						img.src = a[i].flag;
+						img.width=50;
+						img.height=50;
+						img.alt = "flag";
+						button.innerHTML=a[i].name+"<br><br>";
+						button.appendChild(img);
+						var res= document.getElementById("searchResults");
+						res.appendChild(button);
+						/* Onclick function definition to redirect to another page when a button is being pressed and sending the button id and add the value of alpha2Code stored in button*/
+						button.onclick=function()
+						{
+							window.location.href="Countrypage.html?alpha2Code="+this.id;
+						}
+					}
+
+				  });
+
+			}
+			
+		</script>
+	
+	</body>
+
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html
+
+	This page uses the alpha2code of the country to uniquely identify the country and display the details.
+
+>
+<html>
+     <head>
+		<a href="Front Page.html">Previous</a></br>
+	</head>
+	<style>
+		table
+		{
+			width:50%;
+			border-collapse: collapse;
+			align-text:center;
+			text-align: left;
+			vertical-align: bottom;
+			padding :200 px;
+			font-family: "Times New Roman", Times, serif;
+			font-size:25px;
+			color:"white";
+		}
+	</style>
+	<body>
+	<script>
+		var queryString = decodeURIComponent(window.location.search);
+
+		var queries = queryString.split("=");
+		var Alpha2Code=queries[1];
+		fetch('https://restcountries.eu/rest/v2/alpha/'+Alpha2Code+'')
+			.then(response => response.json())
+			.then(data => 
+			{
+				
+				//adding image and country name
+				var tableRow=document.createElement("tr");
+				var tableCol1=document.createElement("td");
+				var tableCol2=document.createElement("img");
+				var node=document.createTextNode(data.name);
+				tableCol1.appendChild(node);
+				tableCol2.src=data.flag;
+				tableCol2.width=250;
+				tableCol2.height=200;
+				
+				tableRow.appendChild(tableCol1);
+				tableRow.appendChild(tableCol2);
+				var element=document.getElementById("countryDetails");
+				element.appendChild(tableRow);
+				
+				//adding Capital details
+				var tableRow=document.createElement("tr");
+				var tableCol1=document.createElement("td");
+				var tableCol2=document.createElement("td");
+				var node=document.createTextNode("Capital")
+				tableCol1.appendChild(node);
+				if(data.capital!="")
+					node=document.createTextNode(data.capital);
+				else
+					node=document.createTextNode("-");
+				tableCol2.appendChild(node);
+				tableRow.appendChild(tableCol1);
+				tableRow.appendChild(tableCol2);
+				var element=document.getElementById("countryDetails");
+				element.appendChild(tableRow);
+				
+				//Adding language details
+				var tableRow=document.createElement("tr");
+				var tableCol1=document.createElement("td");
+				var tableCol2=document.createElement("td");
+				var node=document.createTextNode("Language")
+				tableCol1.appendChild(node);
+				node=document.createTextNode(data.languages[0].name);
+				tableCol2.appendChild(node);
+				tableRow.appendChild(tableCol1);
+				tableRow.appendChild(tableCol2);
+				var element=document.getElementById("countryDetails");
+				element.appendChild(tableRow);
+				
+				//Adding currency
+				var tableRow=document.createElement("tr");
+				var tableCol1=document.createElement("td");
+				var tableCol2=document.createElement("td");
+				var node=document.createTextNode("Currency")
+				tableCol1.appendChild(node);
+				node=document.createTextNode(data.currencies[0].name);
+				tableCol2.appendChild(node);
+				tableRow.appendChild(tableCol1);
+				tableRow.appendChild(tableCol2);
+				var element=document.getElementById("countryDetails");
+				element.appendChild(tableRow);
+				
+				//Adding Timezone
+				var tableRow=document.createElement("tr");
+				var tableCol1=document.createElement("td");
+				var tableCol2=document.createElement("td");
+				var node=document.createTextNode("Time Zone")
+				tableCol1.appendChild(node);
+				node=document.createTextNode(data.timezones[0]);
+				tableCol2.appendChild(node);
+				tableRow.appendChild(tableCol1);
+				tableRow.appendChild(tableCol2);
+				var element=document.getElementById("countryDetails");
+				element.appendChild(tableRow);
+				
+			}
+			);
+	</script>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+		<center>
+	<table id="countryDetails"  cellspacing= "25" border="0">
+		</center>
+	
+	</table>
+	<h1></h1>
+	</body>
+</html>
